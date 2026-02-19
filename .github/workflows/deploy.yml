@@ -20,22 +20,24 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Login to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ secrets.GHCR_USER }}
-          password: ${{ secrets.GHCR_PAT }}
+  uses: docker/login-action@v3
+  with:
+    registry: ghcr.io
+    username: ${{ github.actor }}
+    password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build & push backend
         uses: docker/build-push-action@v6
         with:
           context: ./backend
           push: true
-          tags: ghcr.io/${{ secrets.GHCR_USER }}/taskboard-backend:latest
+          tags: ghcr.io/${{ github.repository_owner }}/taskboard-backend:latest
+
 
       - name: Build & push frontend
         uses: docker/build-push-action@v6
         with:
           context: ./frontend
           push: true
-          tags: ghcr.io/${{ secrets.GHCR_USER }}/taskboard-frontend:latest
+          tags: ghcr.io/${{ github.repository_owner }}/taskboard-frontend:latest
+
